@@ -11,23 +11,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     console.log('Disconnecting from the database...');
     await this.$disconnect();
   }
-
-  async createSecurityGuard(data: {
-    firstName: string;
-    lastName: string;
-    middleName?: string;
-    email: string;
-    password: string;
-  }) {
-    return this.user.create({
-      data: {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        middle_name: data.middleName,
-        email: data.email,
-        password: data.password,
-        role: 'SECURITY',
-      },
-    });
-  }
 }

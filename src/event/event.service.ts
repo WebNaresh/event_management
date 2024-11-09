@@ -42,6 +42,7 @@ export class EventService {
       include: {
         checkPoints: true,
         user: true,
+        security_person: true,
       },
     });
     return {
@@ -62,6 +63,43 @@ export class EventService {
     });
     return {
       message: 'CheckPoint has been successfully added to the event',
+    };
+  }
+
+  async delete(id: string) {
+    await this.prisma.event.delete({
+      where: { id },
+    });
+    return {
+      message: 'Event has been successfully deleted',
+    };
+  }
+
+  async get_security_person_events(user_id: string) {
+    const events = await this.prisma.event.findMany({
+      where: {
+        security_person: {
+          some: {
+            userId: user_id,
+          },
+        },
+      },
+    });
+    return {
+      message: 'List of all events',
+      data: events,
+    };
+  }
+
+  async get_event_checkpoints(event_id: string) {
+    const checkpoints = await this.prisma.checkPoints.findMany({
+      where: {
+        eventId: event_id,
+      },
+    });
+    return {
+      message: 'List of all checkpoints',
+      data: checkpoints,
     };
   }
 }

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AssignSecurityDto } from './dto/assign-security.dto';
 import { CreateSecurityDto } from './dto/create-security.dto';
 import { SecurityService } from './security.service';
 
@@ -17,6 +18,21 @@ export class SecurityController {
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   create(@Body() createSecurityDto: CreateSecurityDto) {
     return this.securityService.create(createSecurityDto);
+  }
+
+  @Post('assign')
+  @ApiOperation({ summary: 'Assign security guards to an event' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Security guards have been successfully assigned to the event.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  assignSecurityToEvent(@Body() assignSecurityDto: AssignSecurityDto) {
+    return this.securityService.assignSecurityToEvent(
+      assignSecurityDto.event_id,
+      assignSecurityDto.user_ids,
+    );
   }
 
   @Get(':event_id')

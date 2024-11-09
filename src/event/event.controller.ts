@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateCheckPointDto } from './dto/create-checkpoint.dto';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -43,7 +43,7 @@ export class EventController {
   @ApiParam({
     name: 'event_id',
     description: 'Event ID',
-    example: '672e55e2dd224ee700702525',
+    example: '672e4c8a7e62815f544d78a5',
   })
   @ApiResponse({ status: 404, description: 'Event not found.' })
   findOne(@Param('event_id') event_id: string) {
@@ -62,5 +62,54 @@ export class EventController {
     @Body() createCheckPointDto: CreateCheckPointDto,
   ) {
     return this.eventService.addCheckPoint(event_id, createCheckPointDto);
+  }
+
+  @Delete(':event_id')
+  @ApiOperation({ summary: 'Delete event by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The event has been successfully deleted.',
+  })
+  @ApiParam({
+    name: 'event_id',
+    description: 'Event ID',
+    example: '672e4c8a7e62815f544d78a5',
+  })
+  @ApiResponse({ status: 404, description: 'Event not found.' })
+  delete(@Param('event_id') event_id: string) {
+    return this.eventService.delete(event_id);
+  }
+
+  @Get('security-person/:user_id')
+  @ApiOperation({ summary: 'Get events assigned to security person' })
+  @ApiResponse({
+    status: 200,
+    description: 'The events have been successfully retrieved.',
+    type: [Event],
+  })
+  @ApiParam({
+    name: 'user_id',
+    description: 'User ID',
+    example: '672e4c8a7e62815f544d78a5',
+  })
+  @ApiResponse({ status: 404, description: 'No events found.' })
+  getSecurityPersonEvents(@Param('user_id') user_id: string) {
+    return this.eventService.get_security_person_events(user_id);
+  }
+
+  @Get(':event_id/checkpoints')
+  @ApiOperation({ summary: 'Get checkpoints of an event' })
+  @ApiResponse({
+    status: 200,
+    description: 'The checkpoints have been successfully retrieved.',
+  })
+  @ApiParam({
+    name: 'event_id',
+    description: 'Event ID',
+    example: '672e4c8a7e62815f544d78a5',
+  })
+  @ApiResponse({ status: 404, description: 'No checkpoints found.' })
+  getEventCheckpoints(@Param('event_id') event_id: string) {
+    return this.eventService.get_event_checkpoints(event_id);
   }
 }
