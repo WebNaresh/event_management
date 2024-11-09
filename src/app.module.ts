@@ -11,6 +11,7 @@ import { EmailModule } from './utils/email/email.module';
 import { Fast2SmsModule } from './utils/fast_2_sms/fast_2_sms.module';
 import { JwtTokenModule } from './utils/jwt_token/jwt_token.module';
 import { PrismaModule } from './utils/prisma/prisma.module';
+import { CheckpointModule } from './checkpoint/checkpoint.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PrismaModule } from './utils/prisma/prisma.module';
     BcryptModule,
     AuthModule,
     SecurityModule,
+    CheckpointModule,
   ],
   controllers: [AppController],
   providers: [AppService],
